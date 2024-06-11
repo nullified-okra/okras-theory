@@ -5,14 +5,14 @@ import { theory } from "./api/Theory";
 import { Utils } from "./api/Utils";
 
 var id = "my_custom_theory_id";
-var name = "My Custom Theory";
-var description = "A basic theory.";
+var name = "okra's theory";
+var description = "okra's random theory";
 var authors = "nulepied_okra";
 var version = 1;
 
 var currency;
-var c1, c2;
-var c1Exp, c2Exp;
+var c1, c2, c3, c4;
+var c1Exp, c2Exp. c3Exp. c4Exp;
 
 var achievement1, achievement2;
 var chapter1, chapter2;
@@ -39,12 +39,21 @@ var init = () => {
         c2.getDescription = (_) => Utils.getMath(getDesc(c2.level));
         c2.getInfo = (amount) => Utils.getMathTo(getInfo(c2.level), getInfo(c2.level + amount));
     }
+	
+	//c3
+	{
+        let getDesc = (level) => "c_3=5^{" + level + "}";
+        let getInfo = (level) => "c_3=" + getC3(level).toString(0);
+        c3 = theory.createUpgrade(1, currency, new ExponentialCost(5, Math.log2(20)));
+        c3.getDescription = (_) => Utils.getMath(getDesc(c3.level));
+        c3.getInfo = (amount) => Utils.getMathTo(getInfo(c3.level), getInfo(c3.level + amount));
+    }
 
     /////////////////////
     // Permanent Upgrades
     theory.createPublicationUpgrade(0, currency, 1e10);
     theory.createBuyAllUpgrade(1, currency, 1e15);
-    theory.createAutoBuyerUpgrade(2, currency, 1e20);
+    theory.createAutoBuyerUpgrade(2, currency, 1e30);
 
     ///////////////////////
     //// Milestone Upgrades
@@ -52,8 +61,8 @@ var init = () => {
 
     {
         c1Exp = theory.createMilestoneUpgrade(0, 3);
-        c1Exp.description = Localization.getUpgradeIncCustomExpDesc("c_1", "0.15");
-        c1Exp.info = Localization.getUpgradeIncCustomExpInfo("c_1", "0.15");
+        c1Exp.description = Localization.getUpgradeIncCustomExpDesc("c_1", "0.05");
+        c1Exp.info = Localization.getUpgradeIncCustomExpInfo("c_1", "0.05");
         c1Exp.boughtOrRefunded = (_) => theory.invalidatePrimaryEquation();
     }
 
@@ -64,10 +73,16 @@ var init = () => {
         c2Exp.boughtOrRefunded = (_) => theory.invalidatePrimaryEquation();
     }
     
+	{
+        c3Exp = theory.createMilestoneUpgrade(1, 3);
+        c3Exp.description = Localization.getUpgradeIncCustomExpDesc("c_3", "0.15");
+        c3Exp.info = Localization.getUpgradeIncCustomExpInfo("c_3", "0.15");
+        c3Exp.boughtOrRefunded = (_) => theory.invalidatePrimaryEquation();
+    }
     /////////////////
     //// Achievements
-    achievement1 = theory.createAchievement(0, "Achievement 1", "Description 1", () => c1.level > 1);
-    achievement2 = theory.createSecretAchievement(1, "Achievement 2", "Description 2", "Maybe you should buy two levels of c2?", () => c2.level > 1);
+    achievement1 = theory.createAchievement(0, "Multiplication", "Description 1", () => c1.level > 1);
+    achievement2 = theory.createSecretAchievement(1, "Another Variable", "Description 2", "Maybe you should buy two levels of c2?", () => c2.level > 1);
 
     ///////////////////
     //// Story chapters
@@ -105,8 +120,8 @@ var getPrimaryEquation = () => {
 }
 
 var getSecondaryEquation = () => theory.latexSymbol + "=\\max\\rho";
-var getPublicationMultiplier = (tau) => tau.pow(0.4) / BigNumber.THREE;
-var getPublicationMultiplierFormula = (symbol) => "\\frac{{" + symbol + "}^{0.4}}{3}";
+var getPublicationMultiplier = (tau) => tau.pow(0.164) / BigNumber.THREE;
+var getPublicationMultiplierFormula = (symbol) => "\\frac{{" + symbol + "}^{0.164}}{3}";
 var getTau = () => currency.value;
 var get2DGraphValue = () => currency.value.sign * (BigNumber.ONE + currency.value.abs()).log10().toNumber();
 
